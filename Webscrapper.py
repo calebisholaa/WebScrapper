@@ -29,7 +29,9 @@ URL = "https://www.etsu.edu/gradschool/doctoral-degrees.php"
 
 page = requests.get(URL)
 
-soup = BeautifulSoup(page.content, 'html.parser')
+#soup = BeautifulSoup(page.content, 'html.parser')
+#soup = BeautifulSoup(page.content, 'html5lib')
+soup = BeautifulSoup(page.content, 'lxml')
 
 
 #gets all the programs offered
@@ -45,10 +47,11 @@ for program in programsResult.find_all('details'):
                 
                 
                 #Getting Coordinator Info
-                coordinatorInfo = program.find(string="Coordinator ").findNext('ul').contents[0].nextSibling.get_text()
+                #coordinatorInfo = program.find(string="Coordinator ").findNext('ul').contents[0].nextSibling.get_text()
+                coordinatorInfo = program.find(string="Coordinator ").findNext('ul').get_text()
 
                 #testing for masters
-                print(coordinatorInfo)
+                #print(coordinatorInfo)
 
                 phoneIndex = re.search(r'Phone:', coordinatorInfo)
                 emailIndex = re.search(r'Email:', coordinatorInfo)
