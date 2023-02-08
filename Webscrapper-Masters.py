@@ -98,7 +98,7 @@ for program in programsResult.find_all('details'):
         elif program.find(string="Coordinators") != None:
 
                 coordinatorInfoList =between((program.find(string="Coordinators")),(program.find(string="Location/Delivery Method")))
-                print(programName)
+                #print(programName)
                 #print(coordinatorInfoList[0])
 
 
@@ -132,12 +132,49 @@ for program in programsResult.find_all('details'):
 
                         if len(coordinatorInfoList) == 0:
                                 break
+        elif program.find(string="Coordinators ") != None:
+                coordinatorInfoList =between((program.find(string="Coordinators ")),(program.find(string="Location/Delivery Method")))
+                
+                phoneIndex = re.search(r'Phone:', coordinatorInfo)
+                emailIndex = re.search(r'Email:', coordinatorInfo)
+                inquiriesIndex = re.search(r'Inquiries', coordinatorInfo)
+                formsIndex = re.search(r'Forms:', coordinatorInfo)
 
+               # print(programName)
+                while(True):
+                        if '-' in coordinatorInfoList[0]:
+                                coordName = coordinatorInfoList[0].split('-')
+                                programNameAndCon = programName
+                                programNameAndCon += " ; "
+                                programNameAndCon += coordinatorInfoList[1]
+
+                                if emailIndex == None:
+                                        coordinatorName = coordinatorInfoList[0]
+                                        coordinatorPhone = coordinatorInfoList[1]
+                                        coordinatorInquiries = coordinatorInfo[inquiriesIndex.start() + 11 :formsIndex.start()].strip()
+                                        coordinatorForm = coordinatorInfo[formsIndex.start() + 7:].strip()
+                                        coordinatorEmail = "Inquiries: " + coordinatorInquiries +  "Form: " + coordinatorForm
+                              
+                                       
+                                #Getting Program Location/Delivery Method
+                                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+
+                                gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                       
+
+                        if gradProgram not in graduateProgramList:
+                                graduateProgramList.append(gradProgram)
+
+                        del coordinatorInfoList[0]
+                        
+
+                        if len(coordinatorInfoList) == 0:
+                                break
       
 
 
               
 
 
-#for study in graduateProgramList:
-        #print(study.programName, study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod)
+for study in graduateProgramList:
+        print(study.programName, study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod)
