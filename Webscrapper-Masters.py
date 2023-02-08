@@ -10,8 +10,16 @@ class GraduateProgram:
                 self.deliveryMethod = deliveryMethod
         
        
-        
-
+def between(cur, end):
+	string = []
+	while cur and cur != end:
+		if isinstance(cur, NavigableString):
+			text = cur.strip()
+			if len(text) and text != "Coordinators" and text != "Phone:" and text != "Email:":
+				string.append(text)
+		cur = cur.next_element
+	
+	return string
 
 
 graduateProgramList =[]
@@ -86,11 +94,50 @@ for program in programsResult.find_all('details'):
 
                 if gradProgram not in graduateProgramList:
                         graduateProgramList.append(gradProgram)
-             
+        
+        elif program.find(string="Coordinators") != None:
+
+                coordinatorInfoList =between((program.find(string="Coordinators")),(program.find(string="Location/Delivery Method")))
+                print(programName)
+                #print(coordinatorInfoList[0])
+
+
+                while(True):
+                        if '-' in coordinatorInfoList[0]:
+                                coordName = coordinatorInfoList[0].split('-')
+
+                                programNameAndCon = programName
+                                programNameAndCon += " ; "
+                                programNameAndCon += coordinatorInfoList[1]
+
+                        
+                                  #Getting Program Location/Delivery Method
+                                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+                                del coordinatorInfoList[1]
+
+
+
+                                gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
+
+                        else:
+                                gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
+
+
+                        if gradProgram not in graduateProgramList:
+                                graduateProgramList.append(gradProgram)
+
+                        del coordinatorInfoList[0]
+                        del coordinatorInfoList[0]
+                        del coordinatorInfoList[0]
+
+                        if len(coordinatorInfoList) == 0:
+                                break
+
+      
 
 
               
 
 
-for study in graduateProgramList:
-        print(study.programName, study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod)
+#for study in graduateProgramList:
+        #print(study.programName, study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod)

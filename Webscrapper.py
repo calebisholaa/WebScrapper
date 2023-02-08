@@ -48,7 +48,7 @@ for program in programsResult.find_all('details'):
                 
                 #Getting Coordinator Info
                 #coordinatorInfo = program.find(string="Coordinator ").findNext('ul').contents[0].nextSibling.get_text()
-                coordinatorInfo = program.find(string="Coordinator ").findNext('ul').get_text()
+                coordinatorInfo = program.find(string="Coordinator ").findNext('ul').contents[0].nextSibling.get_text()
 
                 #testing for masters
                 #print(coordinatorInfo)
