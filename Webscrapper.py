@@ -26,6 +26,7 @@ graduateProgramList =[]
 URL = "https://www.etsu.edu/gradschool/doctoral-degrees.php"
 #URL = "https://www.etsu.edu/gradschool/masters-degrees.php"
 
+
 page = requests.get(URL)
 
 soup = BeautifulSoup(page.content, 'html.parser')
@@ -42,14 +43,15 @@ for program in programsResult.find_all('details'):
         #If the program has only one Coordinator - this logic handles the Coordinator written with Space at the end
         if program.find(string="Coordinator ") != None:
                 
+                
                 #Getting Coordinator Info
                 coordinatorInfo = program.find(string="Coordinator ").findNext('ul').contents[0].nextSibling.get_text()
 
                 #testing for masters
-               # print(coordinatorInfo)
+                print(coordinatorInfo)
 
-                phoneIndex = re.search(r'Phone: ', coordinatorInfo)
-                emailIndex = re.search(r'Email: ', coordinatorInfo)
+                phoneIndex = re.search(r'Phone:', coordinatorInfo)
+                emailIndex = re.search(r'Email:', coordinatorInfo)
 
                 coordinatorName = coordinatorInfo[0 : phoneIndex.start()].strip()
                 coordinatorPhone = coordinatorInfo[phoneIndex.start() + 7 :emailIndex.start()].strip()
@@ -59,6 +61,7 @@ for program in programsResult.find_all('details'):
                 deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
                
                 gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                
 
                 if gradProgram not in graduateProgramList:
                         graduateProgramList.append(gradProgram)
@@ -70,7 +73,7 @@ for program in programsResult.find_all('details'):
                 #Getting Coordinator Info
                 coordinatorInfo = program.find(string="Coordinator").findNext('ul').contents[0].nextSibling.get_text()
 
-
+                
                 phoneIndex = re.search(r'Phone:', coordinatorInfo)
                 emailIndex = re.search(r'Email:', coordinatorInfo)
 
@@ -98,9 +101,12 @@ for program in programsResult.find_all('details'):
                                 programNameAndCon += " ; "
                                 programNameAndCon += coordinatorInfoList[1]
 
+                        
                                   #Getting Program Location/Delivery Method
                                 deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
                                 del coordinatorInfoList[1]
+
+
 
                                 gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
 
