@@ -25,6 +25,7 @@ graduateProgramList =[]
 
 URL = "https://www.etsu.edu/gradschool/doctoral-degrees.php"
 #URL = "https://www.etsu.edu/gradschool/masters-degrees.php"
+#URL = "https://www.etsu.edu/gradschool/certificate-programs.php"
 
 
 page = requests.get(URL)
@@ -95,7 +96,7 @@ for program in programsResult.find_all('details'):
         #If program has more than one coordinator this logic handles the Coordinator written with no Space at the end
         elif program.find(string="Coordinators") != None:
 
-                coordinatorInfoList =between((program.find('h2', string="Coordinators")),(program.find('h2', string="Location/Delivery Method")))
+                coordinatorInfoList =between((program.find(string="Coordinators")),(program.find(string="Location/Delivery Method")))
                 while(True):
                         if '-' in coordinatorInfoList[0]:
                                 coordName = coordinatorInfoList[0].split('-')
