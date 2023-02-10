@@ -1,7 +1,8 @@
+from distutils.filelist import findall
 import requests
 from bs4 import BeautifulSoup, NavigableString
 import re
-import pdb
+
 class GraduateProgram:
         def __init__(self, programName="", coordinatorName="", coordinatorPhone="",  coordinatorEmail="", deliveryMethod=""):
                 self.programName = programName
@@ -16,12 +17,35 @@ def between(cur, end):
 	while cur and cur != end:
 		if isinstance(cur, NavigableString):
 			text = cur.strip()
-			if len(text) and text != "Coordinators" and text != "Phone:" and text != "Email:":
+			if len(text) and text != "Coordinators" and text != "Phone:" and text != "Email:" and text != "Inquiries:" and text != "Forms:":
 				string.append(text)
 		cur = cur.next_element
 	
 	return string
 
+def betweenNoEmails(cur, end):
+    string = []
+    while cur and cur != end:
+        if isinstance(cur, NavigableString):
+            text = cur.strip()
+            if len(text) and text != "Coordinators" and text != "Phone:" and text != "Inquiries:" and text != "Forms:" and text != "Email:":
+                string.append(text)
+        cur = cur.next_element
+    return string
+
+def countEmails(list):
+        int;numberEmailsFound=0
+        for item in list:
+                emailsFound = re.findall(r'[\w\.-]+@[\w\.-]+', item)
+                numberEmailsFound += len(emailsFound)
+        return numberEmailsFound
+
+def notOneEmail(list):
+        bool;flag = False
+        if list[4] == re.match(r'[\w\.-]+@[\w\.-]+',list[4]):
+                flag = True
+
+        return flag
 
 graduateProgramList =[]
 
@@ -48,7 +72,7 @@ for program in programsResult.find_all('details'):
      
                 phoneIndex = re.search(r'Phone:', coordinatorInfo)
                 emailIndex = re.search(r'Email:', coordinatorInfo)
-                inquiriesIndex = re.search(r'Inquiries', coordinatorInfo)
+                inquiriesIndex = re.search(r'Inquiries:', coordinatorInfo)
                 formsIndex = re.search(r'Forms:', coordinatorInfo)
              
              #This logic handles a special case where the coordinator does not have a email, but forms and inqiries 
@@ -83,7 +107,7 @@ for program in programsResult.find_all('details'):
      
                 phoneIndex = re.search(r'Phone:', coordinatorInfo)
                 emailIndex = re.search(r'Email:', coordinatorInfo)
-                inquiriesIndex = re.search(r'Inquiries', coordinatorInfo)
+                inquiriesIndex = re.search(r'Inquiries:', coordinatorInfo)
                 formsIndex = re.search(r'Forms:', coordinatorInfo)
              
              #This logic handles a special case where the coordinator does not have a email, but forms and inqiries 
@@ -206,54 +230,81 @@ for program in programsResult.find_all('details'):
 
         elif program.find(string="Coordinators") != None:
 
-                pdb.set_trace()
                 coordinatorInfoList =between((program.find(string="Coordinators")),(program.find(string="Location/Delivery Method")))
                 phoneIndex = re.search(r'Phone:', coordinatorInfo)
                 emailIndex = re.search(r'Email:', coordinatorInfo)
-                inquiriesIndex = re.search(r'Inquiries', coordinatorInfo)
-                formsIndex = re.search(r'Forms:', coordinatorInfo)
+                inquiriesIndex = re.search(r'Inquiries:', coordinatorInfo)    
+                fromsIndex = re.search(r'Forms:', coordinatorInfo)
+                 
+                int;countEmailIndex =0
+                countEmailIndex = len(re.findall('Email',coordinatorInfo))
                
+                '''
+                coordinatorWithNoEmail = betweenNoEmails((program.find(string="Coordinators")),program.find(string="Location/Delivery Method"))
+                phoneIndexdup = re.search(r'Phone:', coordinatorWithNoEmail)
+                inquiriesIndexdup = re.search(r'Inquiries:', coordinatorWithNoEmail)
+                formsIndexdup = re.search(r'Forms:', coordinatorWithNoEmail)
+               '''
 
                 while(True):
-                        if emailIndex == None:
-                                if '-' in coordinatorInfoList[0]:
-                                        coordName = coordinatorInfoList[0].split('-')
+                        if countEmails(coordinatorInfoList) >= 3:
+                               
+                                if '-' in  coordinatorInfoList[0]:
+                                        coordName =  coordinatorInfoList[0].split('-')
 
                                         programNameAndCon = programName
                                         programNameAndCon += " ; "
-                                        programNameAndCon += coordinatorInfoList[1]
+                                        programNameAndCon +=  coordinatorInfoList[1]
 
-                                        
-                                        coordinatorName = coordinatorInfo[0 : phoneIndex.start()].strip()
-                                        coordinatorPhone = coordinatorInfo[phoneIndex.start() + 7 :inquiriesIndex.start()].strip()
-                                        coordinatorInquiries = coordinatorInfo[inquiriesIndex.start() + 11 :formsIndex.start()].strip()
-                                        coordinatorForm = coordinatorInfo[formsIndex.start() + 7:].strip()
-                                        coordinatorEmail = "Inquiries: " + coordinatorInquiries +  "Form: " + coordinatorForm
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
-                                        
-                                        print(coordinatorEmail)
+                                        del coordinatorInfoList[1]
 
-                                        gradProgram = GraduateProgram(programNameAndCon, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
-                                        if gradProgram not in graduateProgramList:
-                                                graduateProgramList.append(gradProgram)
-                                        print(coordinatorEmail)
-                                        del coordinatorInfoList[0]
-                                        del coordinatorInfoList[0]
-                                        del coordinatorInfoList[0]
+                                        coordinatorName =  coordinatorInfo[0][0 : phoneIndex.start()].strip()
+                                        coordinatorPhone = coordinatorInfoList[1]
+                                        if(notOneEmail(coordinatorInfoList)):
+                                            coordinatorInquiries = coordinatorInfoList[2]
+                                            coordinatorForm =   coordinatorInfoList[3]
+                                        
+                                            coordinatorEmail = "Inquiries: " + coordinatorInquiries +  "Form: " + coordinatorForm
+                                            deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+                                            gradProgram = GraduateProgram(programNameAndCon, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                                            if gradProgram not in graduateProgramList:
+                                                    graduateProgramList.append(gradProgram)
+                                        
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                        else: 
+                                            coordinatorEmail = coordinatorInfoList[2]
+                                        
+                                        
+                                            deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+                                            gradProgram = GraduateProgram(programNameAndCon, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+
+                                            if gradProgram not in graduateProgramList:
+                                                    graduateProgramList.append(gradProgram)
+
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                            del coordinatorInfoList[0]
+                                        
+                                        
 
                                         if len(coordinatorInfoList) == 0:
                                                 break
                                 else: 
                                         coordinatorName = coordinatorInfo[0 : phoneIndex.start()].strip()
-                                        coordinatorPhone = coordinatorInfo[phoneIndex.start() + 7 :inquiriesIndex.start()].strip()
-                                        coordinatorInquiries = coordinatorInfo[inquiriesIndex.start() + 11 :formsIndex.start()].strip()
-                                        coordinatorForm = coordinatorInfo[formsIndex.start() + 7:].strip()
-                                        coordinatorEmail = "Inquiries: " + coordinatorInquiries +  "Form: " + coordinatorForm
+                                        coordinatorPhone = coordinatorInfo[phoneIndex.start() + 7 :emailIndex.start()].strip()
+
+                                        if emailIndex != None:                                     
+                                           coordinatorEmail = coordinatorInfo[emailIndex.start() + 7:].strip() 
 
                                         #Getting Program Location/Delivery Method
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+                                           deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
-                                        gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                                           gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
                 
 
                                 
