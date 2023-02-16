@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup, NavigableString
 import re
+import csv
 
 class GraduateProgram:
         def __init__(self, programName="", coordinatorName="", coordinatorPhone="",  coordinatorEmail="", deliveryMethod=""):
@@ -70,7 +71,12 @@ for program in programsResult.find_all('details'):
                                 graduateProgramList.append(gradProgram)
 
 
-int;i=1
-for study in graduateProgramList:
-      print(i, study.programName, study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod)
-      i+=1
+
+      
+with open('Programs_Coordinators_NonDegree.csv', mode='w') as csv_file:
+	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email"])
+	
+	for study in graduateProgramList:
+		writer.writerow([study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])

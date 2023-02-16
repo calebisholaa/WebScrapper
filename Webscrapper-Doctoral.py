@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup, NavigableString
 import re
+import csv
 class GraduateProgram:
         def __init__(self, programName="", coordinatorName="", coordinatorPhone="",  coordinatorEmail="", deliveryMethod=""):
                 self.programName = programName
@@ -30,9 +31,9 @@ URL = "https://www.etsu.edu/gradschool/doctoral-degrees.php"
 
 page = requests.get(URL)
 
-#soup = BeautifulSoup(page.content, 'html.parser')
+soup = BeautifulSoup(page.content, 'html.parser')
 #soup = BeautifulSoup(page.content, 'html5lib')
-soup = BeautifulSoup(page.content, 'lxml')
+#soup = BeautifulSoup(page.content, 'lxml')
 
 
 #gets all the programs offered
@@ -132,14 +133,14 @@ for program in programsResult.find_all('details'):
 
 
 
-
-
-
-
-for study in graduateProgramList:
-        print(study.programName, study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod)
-        
-        
+      
+with open('Programs_Coordinators_Doctoral.csv', mode='w') as csv_file:
+	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email"])
+	
+	for study in graduateProgramList:
+		writer.writerow([study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])       
         
 
 
