@@ -87,7 +87,7 @@ for program in programsResult.find_all('details'):
                 coordinatorName = coordinatorInfo[0 : phoneIndex.start()].strip()
                 coordinatorPhone = coordinatorInfo[phoneIndex.start() + 7 :emailIndex.start()].strip()
                 coordinatorEmail = coordinatorInfo[emailIndex.start() + 7:].strip()
-                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                 gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
                 if gradProgram not in graduateProgramList:
@@ -98,7 +98,7 @@ for program in programsResult.find_all('details'):
                 coordinatorPhone = "Null"
                 coordinatorEmail = coordinatorInfo[emailIndex.start() + 7:].strip()
 
-                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                 gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
                 if gradProgram not in graduateProgramList:
@@ -133,7 +133,7 @@ for program in programsResult.find_all('details'):
             coordinatorEmail = coordinatorInfo[emailIndex.start() + 7:].strip() 
 
         #Getting Program Location/Delivery Method
-        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
         gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
         if gradProgram not in graduateProgramList:
@@ -179,8 +179,8 @@ for program in programsResult.find_all('details'):
                                         coordinatorForm =   coordinatorInfoList[3]
                                         
                                         coordinatorEmail = "Inquiries: " + coordinatorInquiries +  " Form: " + coordinatorForm
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
-                                        gradProgram = GraduateProgram(programNameAndCon, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+                                        gradProgram = GraduateProgram(programNameAndCon, coordName[0], coordinatorPhone, coordinatorEmail,deliveryMethod)
                                         
                                         if gradProgram not in graduateProgramList:
                                                  graduateProgramList.append(gradProgram)
@@ -211,9 +211,9 @@ for program in programsResult.find_all('details'):
                                         
                                         coordinatorEmail = coordinatorInfoList[2]
 
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
-                                        gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                                        gradProgram = GraduateProgram(programName, coordName[0], coordinatorPhone, coordinatorEmail,deliveryMethod)
 
                                         if gradProgram not in graduateProgramList:
                                                 graduateProgramList.append(gradProgram)
@@ -234,7 +234,7 @@ for program in programsResult.find_all('details'):
                                            coordinatorEmail = coordinatorInfo[emailIndex.start() + 7:].strip() 
 
                                         #Getting Program Location/Delivery Method
-                                           deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                                           deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                                            gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
                 
@@ -261,12 +261,12 @@ for program in programsResult.find_all('details'):
 
                                 
                                         #Getting Program Location/Delivery Method
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
                                         del coordinatorInfoList[1]
 
                                       
 
-                                        gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
+                                        gradProgram = GraduateProgram(programNameAndCon, coordName[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
 
                                 else:
                                         gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
@@ -339,8 +339,8 @@ for program in programsResult.find_all('details'):
                                         coordinatorForm =   coordinatorInfoList[3]
                                         
                                         coordinatorEmail = "Inquiries: " + coordinatorInquiries +  " Form: " + coordinatorForm
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
-                                        gradProgram = GraduateProgram(programNameAndCon, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
+                                        gradProgram = GraduateProgram(programNameAndCon, coordName[0], coordinatorPhone, coordinatorEmail,deliveryMethod)
                                         numInquiries-1
 
                                         if gradProgram not in graduateProgramList:
@@ -372,9 +372,9 @@ for program in programsResult.find_all('details'):
                                         
                                         coordinatorEmail = coordinatorInfoList[2]
 
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
-                                        gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
+                                        gradProgram = GraduateProgram(programName, coordName[0], coordinatorPhone, coordinatorEmail,deliveryMethod)
 
                                         if gradProgram not in graduateProgramList:
                                                 graduateProgramList.append(gradProgram)
@@ -397,7 +397,7 @@ for program in programsResult.find_all('details'):
                                             coordinatorEmail = "Inquiries: " + coordinatorInquiries +  " Form: " + coordinatorForm
 
                                         #Getting Program Location/Delivery Method
-                                            deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                                            deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                                             gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
                                             numInquiries - 1
@@ -425,12 +425,12 @@ for program in programsResult.find_all('details'):
 
                                 
                                         #Getting Program Location/Delivery Method
-                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                                        deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
                                         del coordinatorInfoList[1]
 
                                       
 
-                                        gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
+                                        gradProgram = GraduateProgram(programNameAndCon, coordName[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
 
                                 else:
                                         gradProgram = GraduateProgram(programName, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
@@ -453,7 +453,17 @@ for program in programsResult.find_all('details'):
 with open('Programs_Coordinators_Online_degrees.csv', mode='w') as csv_file:
 	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 	
-	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email"])
+	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email", "Delivery Method"])
 	
 	for study in graduateProgramList:
 		writer.writerow([study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])
+
+
+
+
+with open('All_Programs_Coordinators.csv', mode='a') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+	
+        for study in graduateProgramList:
+	        writer.writerow(["Online Degrees" ,study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])

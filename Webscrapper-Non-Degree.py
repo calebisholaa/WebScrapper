@@ -43,7 +43,7 @@ for program in programsResult.find_all('details'):
                 contactPhone = contactInfo[phoneIndex.start() + 7 :emailIndex.start()].strip()
                 contactEmail = contactInfo[emailIndex.start() + 7:].strip()
 
-                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                 gradProgram = GraduateProgram(programName, contactName, contactPhone, contactEmail,deliveryMethod)
                 if gradProgram not in graduateProgramList:
@@ -54,7 +54,7 @@ for program in programsResult.find_all('details'):
                 contactPhone = "Null"
                 contactEmail = contactInfo[emailIndex.start() + 7:].strip()
 
-                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                 gradProgram = GraduateProgram(programName, contactName, contactPhone, contactEmail,deliveryMethod)
                 if gradProgram not in graduateProgramList:
@@ -64,7 +64,7 @@ for program in programsResult.find_all('details'):
                 contactPhone = contactInfo[phoneIndex.start() + 7 :emailIndex.start()].strip()
                 contactEmail = "Null"
 
-                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').get_text()
+                deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
 
                 gradProgram = GraduateProgram(programName, contactName, contactPhone, contactEmail,deliveryMethod)
                 if gradProgram not in graduateProgramList:
@@ -76,7 +76,16 @@ for program in programsResult.find_all('details'):
 with open('Programs_Coordinators_NonDegree.csv', mode='w') as csv_file:
 	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 	
-	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email"])
+	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email","Delivery Method"])
 	
 	for study in graduateProgramList:
 		writer.writerow([study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])
+
+
+
+with open('All_Programs_Coordinators.csv', mode='a') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+       	
+        for study in graduateProgramList:
+	        writer.writerow(["Non Degree" ,study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])

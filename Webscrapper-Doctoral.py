@@ -21,6 +21,10 @@ def between(cur, end):
 		cur = cur.next_element
 	
 	return string
+
+
+
+
               
 graduateProgramList =[]
 
@@ -43,7 +47,7 @@ for program in programsResult.find_all('details'):
 
         #programName - for example Audiology -Au.D, Biomedical Science -Ph.D
         programName = program.find('summary').get_text().strip()
-
+       # print(program.text)
         #If the program has only one Coordinator - this logic handles the Coordinator written with Space at the end
         if program.find(string="Coordinator ") != None:
                 
@@ -64,7 +68,8 @@ for program in programsResult.find_all('details'):
 
                 #Getting Program Location/Delivery Method
                 deliveryMethod = program.find(string="Location/Delivery Method").findNext('ul').contents[0].nextSibling.get_text()
-               
+                
+                
                 gradProgram = GraduateProgram(programName, coordinatorName, coordinatorPhone, coordinatorEmail,deliveryMethod)
                 
 
@@ -113,7 +118,7 @@ for program in programsResult.find_all('details'):
 
 
 
-                                gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
+                                gradProgram = GraduateProgram(programNameAndCon, coordName[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
 
                         else:
                                 gradProgram = GraduateProgram(programNameAndCon, coordinatorInfoList[0], coordinatorInfoList[1], coordinatorInfoList[2],deliveryMethod)
@@ -137,10 +142,17 @@ for program in programsResult.find_all('details'):
 with open('Programs_Coordinators_Doctoral.csv', mode='w') as csv_file:
 	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 	
-	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email"])
+	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email","Delivery Method"])
 	
 	for study in graduateProgramList:
 		writer.writerow([study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])       
         
 
 
+with open('All_Programs_Coordinators.csv', mode='w') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+        writer.writerow(["ProgramType", "Program Name ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email","Delivery Method"])
+	
+        for study in graduateProgramList:
+	        writer.writerow(["Doctoral" ,study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])

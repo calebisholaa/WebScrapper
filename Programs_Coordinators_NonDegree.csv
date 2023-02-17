@@ -1,17 +1,5 @@
-Program Name - Type ; Concentration,Coordinator's Name,Coordinator's Phone Number,Coordinator's Email
-Personal Enrichment,Shella Bennett,423-439-4708,bennetsg@etsu.edu,"
-On Campus
-Online
-"
-Intent To Transfer,Shella Bennett,423-439-4708,bennetsg@etsu.edu,"
-On Campus
-Online
-"
-Visiting Students,Shella Bennett,423-439-4708,bennetsg@etsu.edu,"
-On Campus
-Online
-"
-Faculty Taking GRAD Courses,Shella Bennett,423-439-4708,bennetsg@etsu.edu,"
-On Campus
-Online
-"
+Program Name - Type ; Concentration,Coordinator's Name,Coordinator's Phone Number,Coordinator's Email,Delivery Method
+Personal Enrichment,Shella Bennett,423-439-4708,bennetsg@etsu.edu,On Campus and online
+Intent To Transfer,Shella Bennett,423-439-4708,bennetsg@etsu.edu,On Campus and online
+Visiting Students,Shella Bennett,423-439-4708,bennetsg@etsu.edu,On Campus and online
+Faculty Taking GRAD Courses,Shella Bennett,423-439-4708,bennetsg@etsu.edu,On Campus and online

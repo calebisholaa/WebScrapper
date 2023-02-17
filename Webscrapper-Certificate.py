@@ -120,7 +120,18 @@ for program in programsResult.find_all('details'):
 with open('Programs_Coordinators_Certificate.csv', mode='w') as csv_file:
 	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 	
-	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email"])
+	writer.writerow(["Program Name - Type ; Concentration", "Coordinator's Name", "Coordinator's Phone Number", "Coordinator's Email","Delivery Method"])
 	
 	for study in graduateProgramList:
 		writer.writerow([study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])
+
+
+
+
+with open('All_Programs_Coordinators.csv', mode='a') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+        
+	
+        for study in graduateProgramList:
+	        writer.writerow(["Certificate Programs" ,study.programName,study.coordinatorName, study.coordinatorPhone, study.coordinatorEmail, study.deliveryMethod])
