@@ -20,7 +20,8 @@ graduateProgramList =[]
 str;personalStatement=""
 
 
-URL = "https://www.etsu.edu/gradschool/doctoral-degrees.php"
+URL = "https://www.etsu.edu/gradschool/certificate-programs.php"
+
 
 page = requests.get(URL)
 
@@ -32,22 +33,12 @@ for program in programsResult.find_all('details'):
 
 	programName = program.find('summary').get_text().strip()
 	
+		 #print(program.text)
 
 	requirements = program.text
 	before,sep, after = requirements.partition("Recommendations")
 	if len(after) > 0:
 		requirements = after
-		 #print(program.text)
-
-	deadline = program.text
-	before,sep, after = deadline.partition("Deadlines (11: 59 p.m. ET)")
-	if len(after) > 0:
-		deadline = after
-    
-	before,sep, after = deadline.partition("Requirements")
-	if len(before) >0:
-		deadline = before
-		deadline.strip()
 
 	#Get transcripts 
 	transcript = program.text
@@ -130,7 +121,7 @@ for program in programsResult.find_all('details'):
 
 
 	
-	programRequirement = ProgramRequirements(programName, transcript, recommendation, gpa, testScores, personalStatement , additionalReq)
+	programRequirement = ProgramRequirements(programName, transcript, recommendation, gpa, testScores, personalStatement , additionalReq )
 	if programRequirement not in graduateProgramList:
 		graduateProgramList.append(programRequirement)
 
@@ -138,10 +129,20 @@ for program in programsResult.find_all('details'):
 
 
       
-with open('Programs_Requirements_Doctoral.csv', mode='w') as csv_file:
+with open('Programs_Requirements_Certificate.csv', mode='w') as csv_file:
 	writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
 	
 	writer.writerow(["Program Name - Type ; Concentration", "Transcript", "Recommendation", "GPA", "Test Scores", "Personal Statement","Additional Requirements"])
 	
 	for study in graduateProgramList:
 		writer.writerow([study.programName,study.transcript,study.recommendation, study.gpa, study.testScores, study.personalState, study.additionalReq])       
+
+
+
+with open('All_Programs_Requirement.csv', mode='a') as csv_file:
+        writer = csv.writer(csv_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL, lineterminator='\n')
+	
+        writer.writerow(["ProgramType", "Program Name ;  Concentration", "Transcript", "Recommendation", "GPA", "Test Scores", "Personal Statement","Additional Requirements"])
+	
+        for study in graduateProgramList:
+	        writer.writerow(["Certificate" ,study.programName,study.transcript,study.recommendation, study.gpa, study.testScores, study.personalState, study.additionalReq])

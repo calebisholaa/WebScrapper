@@ -29,15 +29,12 @@ def between(cur, end):
 graduateProgramList =[]
 
 URL = "https://www.etsu.edu/gradschool/doctoral-degrees.php"
-#URL = "https://www.etsu.edu/gradschool/masters-degrees.php"
-#URL = "https://www.etsu.edu/gradschool/certificate-programs.php"
 
 
 page = requests.get(URL)
 
 soup = BeautifulSoup(page.content, 'html.parser')
-#soup = BeautifulSoup(page.content, 'html5lib')
-#soup = BeautifulSoup(page.content, 'lxml')
+
 
 
 #gets all the programs offered
